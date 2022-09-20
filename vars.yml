@@ -1,0 +1,29 @@
+---
+# Satellite URL and hostname
+sat_hostname: sat.example.com
+sat_url: "https://{{ sat_hostname }}"
+
+# Credentials, if omitted, you will get promted
+sat_user: "admin"
+# Please use the encrypted passwd.yml ansible vault file
+# sat_passwd: some-pass
+
+organization: "lab"
+location: "BER"
+
+# Use "bootdisk" for VMWare when bootdisk based provisionion is the choice
+provision_method: build
+
+# Host specific stuff
+hostname: test
+domain: example.com
+hostgroup: "BER/prod/generic/rhel8"
+# ommit on pysical machines
+compute_resource: "libvirt"
+# ommit on pysical machines
+compute_profile: "1-Small"
+subnet: "dummynet"
+ip: "10.10.10.10"
+
+# Only needed on pysical machines
+# mac: aa:bb:cc:dd:ee:ff

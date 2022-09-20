@@ -1,0 +1,64 @@
+---
+- hosts: all
+  vars_files:                                                                   
+  - vars.yml                                                                    
+  - passwd.yml
+
+  pre_tasks:
+    - pause:
+        prompt: "Username"
+      register: prompt
+      when: sat_user is undefined
+    - set_fact:
+        sat_user: "{{ prompt.user_input }}"
+      when: sat_user is undefined
+
+    - pause:
+        prompt: "Password"
+        echo: no
+      register: prompt
+      when: sat_passwd is undefined
+    - set_fact:
+        sat_passwd: "{{ prompt.user_input }}"
+      when: sat_passwd is undefined
+
+#  vars_prompt:
+#    - name: sat_user
+#      private: no
+#      default: "{{ satuser }}"
+
+#    - name: sat_passwd
+#      private: yes
+#      default: "{{ satpasswd}}"
+
+  tasks:
+  - name: 'Create VM "{{ hostname }}.{{ domain }}"'
+    redhat.satellite.host:
+      username: "{{ sat_user }}"
+      password: "{{ sat_passwd }}"
+      server_url: "{{ sat_url  }}"
+      organization: "{{ organization }}"
+      location: "{{ location }}"
+      name: '{{ hostname }}.{{ domain}}'
+      hostgroup: "{{ hostgroup }}"
+      compute_resource: "{{ compute_resource|default(omit) }}"
+      compute_profile: "{{ compute_profile|default(omit) }}"
+      build: True
+      provision_method: "{{ provision_method }}"
+      interfaces_attributes:
+      - type: "interface"
+        compute_attributes:
+        name: "{{ hostname }}"
+        subnet: "{{ subnet }}"
+        ip: "{{ ip }}"
+        mac: "{{ mac|default(omit) }}"
+      state: present
+
+  - name: "Power on host"
+    redhat.satellite.host_power:
+      username: "{{ sat_user }}"
+      password: "{{ sat_passwd }}"
+      server_url: "{{ sat_url }}"
+      hostname: "{{ hostname }}.{{ domain }}"
+      state: on
+    when: mac is undefined
