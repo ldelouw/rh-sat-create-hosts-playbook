@@ -11,7 +11,7 @@ This is an Ansible Playbook which creates new hosts on a Red Hat Satellite serve
 
 3. Edit the "passwd.yml" with `ansible-vault edit passwd.yml`. Set the actual password for the user defined in the vars.yml. Optionally you can get rid of the vault file by comment out the line "- passwd.yml" in the Playbook "create_host.yml". In that case, also comment the line "ask_vault_pass = True" in the ansible.cfg file. If you do so, you will get promted for the password when running the Playbook. Echo is turned off.
 
-4. You can overwrite the variables defined in the vars.yml file by using the parameter "--extra-vars". I.e. `ansible-playbook create_host.yml --extra-vars="ip=10.10.10.11"
+4. You can overwrite the variables defined in the vars.yml file by using the parameter "--extra-vars". I.e. `ansible-playbook create_host.yml --extra-vars="ip=10.10.10.11"`
 
 ## Requirements
 You need to have the package "ansible-collection-redhat-satellite" installed. 
